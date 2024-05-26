@@ -1,4 +1,4 @@
-# pi2040-ledstrip
+# pi2040w-ledstrip
 RaspberryPI Pico 2040W led strip controller
 
 # Standard LED Strips
