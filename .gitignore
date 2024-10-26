@@ -1,5 +1,4 @@
 image*
-*.txt
 *.gz
 *.xz
 .venv-*

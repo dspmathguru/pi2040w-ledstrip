@@ -1,0 +1,4 @@
+xmltodict
+python-dotenv
+jupyterlab
+thonny
