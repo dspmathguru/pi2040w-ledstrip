@@ -2,7 +2,8 @@ import plasma
 from plasma import plasma2040
 import time
 
-class LedStrip:
+class LEDStrip:
+  isEven = True
 
   def __init__(self, nL = 35, h1 = 0, h2 = 127, b=0.5, s = 1):
     # Set how many LEDs you have
@@ -27,25 +28,32 @@ class LedStrip:
     # Start updating the LED strip
     self.led_strip.start()
 
-  def doBlink(self):
+  def doBlinkLoop(self):
     while True:
+      self.doBlink()
+      time.sleep(self.SPEED)
+
+  def doBlink(self):
+    if self.isEven:
       for i in range(self.NUM_LEDS):
         if (i % 2) == 0:
           self.led_strip.set_hsv(i, self.HUE_1 / 360, 1.0, self.BRIGHTNESS)
         else:
           self.led_strip.set_hsv(i, self.HUE_2 / 360, 1.0, self.BRIGHTNESS)
-      time.sleep(self.SPEED)
-
+    else:
       for i in range(self.NUM_LEDS):
         if (i % 2) == 0:
           self.led_strip.set_hsv(i, self.HUE_2 / 360, 1.0, self.BRIGHTNESS)
         else:
           self.led_strip.set_hsv(i, self.HUE_1 / 360, 1.0, self.BRIGHTNESS)
-      time.sleep(self.SPEED)
+    self.isEven = not self.isEven
 
+  def doOff(self):
+    for i in range(self.NUM_LEDS):
+      self.led_strip.set_hsv(i, 0, 0, 0)
 
 def main():
-  ls = LedStrip()
+  ls = LEDStrip()
   ls.doBlink()
 
 if __name__ == "__main__":

@@ -24,46 +24,50 @@ def read_json_packet():
   global received_data
   if uart.any():
     received_data += uart.read().decode()
-    print('r> |' + received_data + '|\r\n')
     if "\n" in received_data:
       line, received_data = received_data.split("\n", 1)
       try:
-        uart.write("ACK\n")
+        send_json_packet({ 'rtn': 'ACK' })
         return ujson.loads(line)
       except ValueError:
-        uart.write("ERR: Error parsing JSON: |" + str(line) + "|\n")
+        send_json_packet({ 'rtn': "ERR: Error parsing JSON: |" + str(line) + "|\n" })
   return None
 
 def doLED(ls):
+  global on
   if on:
     ls.doBlink()
+  else:
+    ls.doOff()
 
 def parseJSON(packet):
+  global on
   if 'state' in packet:
     on = packet['state']
 
-def main_loop():
-    last_task = utime.ticks_ms()
+def main():
+  global on
+  last_task = utime.ticks_ms()
 
-    ls = LEDStrip()
+  ls = LEDStrip()
     
-    while True:
-      # Check for incoming JSON data
-      packet = read_json_packet()
-      if packet:
-        parseJSON(packet)
+  while True:
+    # Check for incoming JSON data
+    packet = read_json_packet()
+    if packet:
+      parseJSON(packet)
             
-      # Execute tasks periodically
-      current_time = utime.ticks_ms()
-      tick_time = utime.ticks_diff(current_time, last_task)
-      if tick_time > interval:
-        doLED(ls)
-        last_task = current_time
+    # Execute tasks periodically
+    current_time = utime.ticks_ms()
+    tick_time = utime.ticks_diff(current_time, last_task)
+    if tick_time > interval:
+      doLED(ls)
+      last_task = current_time
         
-      # Add a small delay to reduce CPU load, adjust as necessary
-      utime.sleep_ms(sleepTime)
+    # Add a small delay to reduce CPU load, adjust as necessary
+    utime.sleep_ms(sleepTime)
 
 if __name__ == "__main__":
-    main_loop()
+  main()
 
     
