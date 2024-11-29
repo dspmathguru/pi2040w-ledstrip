@@ -2,7 +2,7 @@ import ujson
 import utime
 from machine import UART
 
-from LedStrip import LedStrip
+from LEDStrip import LEDStrip
 
 # Serial setup for communication
 uart = UART(0, 115200)
@@ -45,7 +45,7 @@ def parseJSON(packet):
 def main_loop():
     last_task = utime.ticks_ms()
 
-    ls = LedStrip()
+    ls = LEDStrip()
     
     while True:
       # Check for incoming JSON data
