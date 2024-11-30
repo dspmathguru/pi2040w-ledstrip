@@ -18,11 +18,8 @@ sleepTime = 10 # mS
 received_data = ""
 
 def send_json_packet(data):
-  gc.collect()
   json_data = ujson.dumps(data)
-  gc.collect()
   uart.write(json_data + "\n")  # Adding newline for easier parsing
-  print(data)
 
 def read_json_packet():
   global received_data
@@ -31,7 +28,6 @@ def read_json_packet():
     if "\n" in received_data:
       line, received_data = received_data.split("\n", 1)
       try:
-        gc.collect()
         send_json_packet({ 'rtn': 'ACK' })
         return ujson.loads(line)
       except ValueError:

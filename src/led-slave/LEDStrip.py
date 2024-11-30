@@ -41,19 +41,21 @@ class LEDStrip:
   # shouldn't be called outside, this is private
   def _doSeq(self):
     if self.seq['type'] == 'shift-colors':
+      print('type:', self.seq['type'])
       for i in range(self.NUM_LEDS):
         self.setHSV(i, self.seq['colors'][(i + self.cnt) % self.Ncolors])
       self.cnt = (self.cnt + 1) % self.Ncolors
     if self.seq['type'] == 'steady-repeat-colors':
+      print('type:', self.seq['type'])
       for i in range(self.NUM_LEDS):
         self.setHSV(i, self.seq['colors'][i % self.Ncolors])
 
   def turnOff(self):
+    print("Off")
     for i in range(self.NUM_LEDS):
       self.setHSV(i, { 'h': 0, 's': 0, 'v': 0 } )
 
   def doSeq(self):
-    gc.collect()
     current_time = utime.ticks_ms()
     tick_time = utime.ticks_diff(current_time, self.last_time)
     if self.seq and tick_time > self.seq['interval'] * self.mS:

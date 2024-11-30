@@ -37,6 +37,7 @@ while True:
     data_to_send = { 'state': False }
   cnt = (cnt + 1) % 3
   json_data = json.dumps(data_to_send)
+  print("cnt:", cnt)
 
   # Send JSON data over serial
   ser.write(json_data.encode() + b'\n')
@@ -46,7 +47,8 @@ while True:
   if response:
     try:
       response_data = json.loads(response)
-      print(f"Received: {response_data}")
+      if response_data['rtn'] != 'ACK':
+        print("ERROR: no ack", response_data)
     except json.JSONDecodeError:
       print("Received invalid JSON data |" + response + '|')
 
