@@ -7,19 +7,39 @@ import time
 # Open a serial connection on the Pi's UART port
 ser = serial.Serial('/dev/ttyS0', baudrate=115200, timeout=1)
 
-state = True
+state = False
 
+ledSeq1 = { 'type': 'shift-colors',
+           'interval': 1.0,
+           'colors': [ { 'h': 0, 's': 1.0, 'v': 0.35 },
+                       { 'h': 20, 's': 1.0, 'v': 0.35 },
+                       { 'h': 40, 's': 1.0, 'v': 0.35 },
+                       { 'h': 60, 's': 1.0, 'v': 0.35 },
+                       { 'h': 80, 's': 1.0, 'v': 0.35 },
+                       { 'h': 126, 's': 1.0, 'v': 0.5 },
+                       { 'h': 126, 's': 1.0, 'v': 0.5 },
+                       { 'h': 126, 's': 1.0, 'v': 0.5 },
+                       { 'h': 126, 's': 1.0, 'v': 0.5 } ]}
+
+ledSeq2 = { 'type': 'steady-repeat-colors',
+           'interval': 1.0,
+           'colors': [ { 'h': 0, 's': 1.0, 'v': 0.35 },
+                       { 'h': 126, 's': 1.0, 'v': 0.35 } ]}
+
+cnt = 0
 while True:
   # Prepare JSON data to send
-  data_to_send = {
-    "state": state
-  }
-  state = not state
+  if cnt % 3 == 0:
+    data_to_send = { 'state': True, 'sequence': ledSeq1 }
+  elif cnt % 3 == 1:
+    data_to_send = { 'state': True, 'sequence': ledSeq2 }
+  else:
+    data_to_send = { 'state': False }
+  cnt = (cnt + 1) % 3
   json_data = json.dumps(data_to_send)
 
   # Send JSON data over serial
   ser.write(json_data.encode() + b'\n')
-  print(f"Sent: {json_data}")
 
   # Read response from the other device
   response = ser.readline().decode().strip()
@@ -28,6 +48,6 @@ while True:
       response_data = json.loads(response)
       print(f"Received: {response_data}")
     except json.JSONDecodeError:
-      print("Received invalid JSON data")
+      print("Received invalid JSON data |" + response + '|')
 
-  time.sleep(5)  # Wait for 2 seconds before next transmission
+  time.sleep(5)
