@@ -2,6 +2,8 @@ import ujson
 import utime
 from machine import UART
 import gc
+import sys
+import micropython
 
 from LEDStrip import LEDStrip
 
@@ -28,8 +30,10 @@ def read_json_packet():
     if "\n" in received_data:
       line, received_data = received_data.split("\n", 1)
       try:
+        utime.sleep_ms(sleepTime)
         send_json_packet({ 'rtn': 'ACK' })
-        return ujson.loads(line)
+        rtn = ujson.loads(line)
+        return rtn
       except ValueError:
         send_json_packet({ 'rtn': "ERR: Error parsing JSON\n" })
   return None
@@ -45,6 +49,9 @@ def main():
   last_task = utime.ticks_ms()
 
   ls = LEDStrip()
+  utime.sleep_ms(sleepTime)
+  ls.turnOff()
+
   while True:
     # Check for incoming JSON data
     packet = read_json_packet()
@@ -55,6 +62,7 @@ def main():
     ls.doSeq()
         
     # Add a small delay to reduce CPU load, adjust as necessary
+
     utime.sleep_ms(sleepTime)
 
 if __name__ == "__main__":

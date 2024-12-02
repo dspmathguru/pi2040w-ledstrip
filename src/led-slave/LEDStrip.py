@@ -20,16 +20,10 @@ class LEDStrip:
     current_time = utime.ticks_ms()
     self.last_time = current_time
 
-  def doBlinkLoop(self):
-    while True:
-      self.doBlink()
-      time.sleep(self.SPEED)
-
   def setState(self, packet):
     if 'state' in packet:
       self.on = packet['state']
     
-
   def setSeq(self, seq):
     self.seq = seq
     self.cnt = 0
@@ -46,19 +40,23 @@ class LEDStrip:
         self.setHSV(i, self.seq['colors'][(i + self.cnt) % self.Ncolors])
       self.cnt = (self.cnt + 1) % self.Ncolors
     if self.seq['type'] == 'steady-repeat-colors':
-      print('type:', self.seq['type'])
-      for i in range(self.NUM_LEDS):
-        self.setHSV(i, self.seq['colors'][i % self.Ncolors])
+      if self.cnt == 0:
+        print('type:', self.seq['type'])
+        for i in range(self.NUM_LEDS):
+          self.setHSV(i, self.seq['colors'][i % self.Ncolors])
+        self.cnt = 1
 
   def turnOff(self):
-    print("Off")
+    print('off')
+    self.on = False
     for i in range(self.NUM_LEDS):
       self.setHSV(i, { 'h': 0, 's': 0, 'v': 0 } )
+    self.seq = None
 
   def doSeq(self):
     current_time = utime.ticks_ms()
     tick_time = utime.ticks_diff(current_time, self.last_time)
-    if self.seq and tick_time > self.seq['interval'] * self.mS:
+    if self.seq and (tick_time > self.seq['interval'] * self.mS):
       if self.on:
         self._doSeq()
       else:
@@ -76,8 +74,8 @@ def main():
                            { 'h': 0, 's': 1.0, 'v': 0.35 },
                            { 'h': 126, 's': 1.0, 'v': 0.5 } ]}
 
-
   ls.setSeq(ledSeq)
+
   while true:
     ls.doSeq()
     utime.sleep_ms(30)
