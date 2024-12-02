@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+sudo apt update -y
+sudo apt upgrade -y
 sudo apt install -y direnv libusb-1.0-0-dev python3-venv
 sudo apt install -y zsh
 
