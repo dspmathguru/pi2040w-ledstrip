@@ -11,7 +11,7 @@ state = False
 
 ledSeq1 = { 'type': 'shift-colors',
 	    'num-leds': 300,
-            'interval': 0.250,
+            'interval': 1.0,
             'colors': [ { 'h': 0, 's': 1.0, 'v': 0.25 },
                         { 'h': 0, 's': 1.0, 'v': 0.25 },
                         { 'h': 126, 's': 1.0, 'v': 0.5 },
@@ -19,7 +19,19 @@ ledSeq1 = { 'type': 'shift-colors',
                         { 'h': 126, 's': 1.0, 'v': 0.5 },
                         { 'h': 126, 's': 1.0, 'v': 0.5 } ]}
 
-ledSeq2 = { 'type': 'steady-repeat-colors',
+ledSeq2 = { 'type': 'shift-colors',
+	    'num-leds': 300,
+            'interval': 1.0,
+            'colors': [ { 'h': 0, 's': 1.0, 'v': 0.25 },
+                        { 'h': 0, 's': 1.0, 'v': 0.25 },
+                        { 'h': 0, 's': 1.0, 'v': 0.25 },
+                        { 'h': 0, 's': 1.0, 'v': 0.25 },
+                        { 'h': 0, 's': 1.0, 'v': 0.25 },
+                        { 'h': 0, 's': 1.0, 'v': 0.25 },
+                        { 'h': 0, 's': 1.0, 'v': 0.25 },
+                        { 'h': 126, 's': 1.0, 'v': 0.5 } ]}
+
+ledSeq3 = { 'type': 'steady-repeat-colors',
 	    'num-leds': 300,
             'interval': 1.0,
             'colors': [ { 'h': 0, 's': 1.0, 'v': 0.15 },
@@ -33,7 +45,7 @@ while True:
   elif cnt % 3 == 1:
     data_to_send = { 'state': True, 'sequence': ledSeq2 }
   else:
-    data_to_send = { 'state': False }
+    data_to_send = { 'state': True, 'sequence': ledSeq3 }
   cnt = (cnt + 1) % 3
   json_data = json.dumps(data_to_send)
   print("cnt:", cnt)
