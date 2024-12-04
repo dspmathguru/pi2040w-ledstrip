@@ -39,12 +39,12 @@ def read_json_packet():
   return None
 
 def parseJSON(packet, ls):
+  if 'num-leds' in packet:
+    ls.setNumLEDs(packet)
   if 'state' in packet:
     ls.setState(packet)
   if 'sequence' in packet:
     ls.setSeq(packet['sequence'])
-    if 'num-leds' in packet['sequence']:
-      ls.setNumLEDs(packet['sequence'])
 
 def main():
   global on
