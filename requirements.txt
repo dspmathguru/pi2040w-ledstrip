@@ -3,3 +3,4 @@ python-dotenv
 jupyterlab
 thonny
 rshell
+flask
