@@ -43,8 +43,8 @@ def parseJSON(packet, ls):
     ls.setState(packet)
   if 'sequence' in packet:
     ls.setSeq(packet['sequence'])
-  if 'num-leds' in packet:
-    ls.setNumLEDs(packet)
+    if 'num-leds' in packet['sequence']:
+      ls.setNumLEDs(packet['sequence'])
 
 def main():
   global on

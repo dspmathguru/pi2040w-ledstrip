@@ -29,6 +29,13 @@ class LEDStrip:
     self.cnt = 0
     self.Ncolors = len(seq['colors'])
 
+  def setNumLEDs(self, packet):
+    print('num-leds:', packet['num-leds'])
+    if self.NUM_LEDS != packet['num-leds']:
+        self.NUM_LEDS = packet['num-leds']
+        self.led_strip = plasma.WS2812(self.NUM_LEDS, 0, 0, plasma2040.DAT)
+        self.led_strip.start()
+
   def setHSV(self, i, hsv):
     self.led_strip.set_hsv(i, hsv['h'] / 360., hsv['s'], hsv['v'])
 
@@ -45,12 +52,6 @@ class LEDStrip:
         for i in range(self.NUM_LEDS):
           self.setHSV(i, self.seq['colors'][i % self.Ncolors])
         self.cnt = 1
-
-  def setNumLEDs(self, nL):
-    self.NUM_LEDS = nL
-    self.led_strip.stop()
-    self.led_strip = plasma.WS2812(self.NUM_LEDS, 0, 0, plasma2040.DAT)
-    self.led_strip.start()
 
   def turnOff(self):
     print('off')

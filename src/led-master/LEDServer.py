@@ -10,7 +10,7 @@ ser = serial.Serial('/dev/ttyS0', baudrate=115200, timeout=1)
 state = False
 
 ledSeq1 = { 'type': 'shift-colors',
-	    'num-leds': 100,
+	    'num-leds': 300,
             'interval': 0.250,
             'colors': [ { 'h': 0, 's': 1.0, 'v': 0.25 },
                         { 'h': 0, 's': 1.0, 'v': 0.25 },
@@ -20,7 +20,7 @@ ledSeq1 = { 'type': 'shift-colors',
                         { 'h': 126, 's': 1.0, 'v': 0.5 } ]}
 
 ledSeq2 = { 'type': 'steady-repeat-colors',
-	    'num-leds': 100,
+	    'num-leds': 300,
             'interval': 1.0,
             'colors': [ { 'h': 0, 's': 1.0, 'v': 0.15 },
                         { 'h': 126, 's': 1.0, 'v': 0.15 } ]}
