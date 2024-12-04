@@ -11,3 +11,5 @@ RaspberryPI Pico 2040W led strip controller
 Note that many LED strips only have 150 LEDs per 5 meters.
 
 Plan on design working for 400W or 10 strips of 12V and 20 strips of 5V.
+
+Write about 'sudo rasp-config'

@@ -46,6 +46,12 @@ class LEDStrip:
           self.setHSV(i, self.seq['colors'][i % self.Ncolors])
         self.cnt = 1
 
+  def setNumLEDs(self, nL):
+    self.NUM_LEDS = nL
+    self.led_strip.stop()
+    self.led_strip = plasma.WS2812(self.NUM_LEDS, 0, 0, plasma2040.DAT)
+    self.led_strip.start()
+
   def turnOff(self):
     print('off')
     self.on = False
@@ -82,3 +88,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -1,4 +1,0 @@
-#! /usr/bin/env bash
-
-pyboard -f cp src/led-slave/LEDStrip.py :
-pyboard -f cp src/led-slave/LEDSlave.py :main.py

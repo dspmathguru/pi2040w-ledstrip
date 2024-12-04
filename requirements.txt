@@ -2,3 +2,4 @@ xmltodict
 python-dotenv
 jupyterlab
 thonny
+rshell

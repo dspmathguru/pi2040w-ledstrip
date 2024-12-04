@@ -3,7 +3,7 @@
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install -y direnv libusb-1.0-0-dev python3-venv
-sudo apt install -y zsh
+sudo apt install -y zsh mosh tio
 
 if [ ! -d ~/.oh-my-zsh ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
