@@ -23,8 +23,8 @@ isNowInTimePeriod(dt.time(20,30), dt.time(1,30), dt.datetime.now().time())
 
 hostname = socket.gethostname()
 
-startTime = dt.time(1,45)
-endTime = dt.time(1,48)
+startTime = dt.time(14,00)
+endTime = dt.time(14,20)
 
 
 # Open a serial connection on the Pi's UART port
@@ -74,15 +74,17 @@ while True:
                        'sequence': ledSeq2 }
     else:
       data_to_send = { 'state': True,
-                       'num-leds': numLEDs,
-                       'sequence': ledSeq3 }
+                       'num-leds': numLEDs }
+
+    cnt = (cnt + 1) % 3
+    print("cnt:", cnt)
+
   else:
+    print(dt.datetime.now().time())
     data_to_send = { 'state': False,
-                     'num-leds': numLEDs,
-                     'sequence': [] }
-  cnt = (cnt + 1) % 3
+                     'num-leds': numLEDs }
+
   json_data = json.dumps(data_to_send)
-  print("cnt:", cnt)
 
   # Send JSON data over serial
   ser.write(json_data.encode() + b'\n')

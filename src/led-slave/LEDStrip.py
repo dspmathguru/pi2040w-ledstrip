@@ -25,9 +25,11 @@ class LEDStrip:
       self.on = packet['state']
     
   def setSeq(self, seq):
-    self.seq = seq
-    self.cnt = 0
-    self.Ncolors = len(seq['colors'])
+    print(seq)
+    if seq:
+      self.seq = seq
+      self.cnt = 0
+      self.Ncolors = len(seq['colors'])
 
   def setNumLEDs(self, packet):
     if self.NUM_LEDS != packet['num-leds']:
