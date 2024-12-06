@@ -23,8 +23,8 @@ isNowInTimePeriod(dt.time(20,30), dt.time(1,30), dt.datetime.now().time())
 
 hostname = socket.gethostname()
 
-startTime = dt.time(14,00)
-endTime = dt.time(14,20)
+startTime = dt.time(16,45)
+endTime = dt.time(22,00)
 
 
 # Open a serial connection on the Pi's UART port
