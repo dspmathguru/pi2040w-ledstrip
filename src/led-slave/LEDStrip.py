@@ -25,7 +25,6 @@ class LEDStrip:
       self.on = packet['state']
     
   def setSeq(self, seq):
-    print(seq)
     if seq:
       self.seq = seq
       self.cnt = 0
@@ -39,7 +38,10 @@ class LEDStrip:
       self.led_strip.start()
 
   def setHSV(self, i, hsv):
-    self.led_strip.set_hsv(i, hsv['h'] / 360., hsv['s'], hsv['v'])
+    try:
+      self.led_strip.set_hsv(i, hsv['h'] / 360., hsv['s'], hsv['v'])
+    except:
+      self.led_strip.set_hsv(i, 0, 0, 0)
 
   # shouldn't be called outside, this is private
   def _doSeq(self):

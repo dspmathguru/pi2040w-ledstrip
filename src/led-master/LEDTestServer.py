@@ -34,13 +34,14 @@ state = False
 
 if hostname == 'light-server':
   numLEDs = 300
+  RED = { 'h': 360 - 0, 's': 1.0, 'v': .8 }
+  GREEN = { 'h': 360 - 145, 's': 1.0, 'v': 1.0}
+  BLUE =  { 'h': 360 - 126, 's': 1.0, 'v': 1.0 }
 else:
   numLEDs = 35
-
-RED = { 'h': 0, 's': 1.0, 'v': 0.5 }
-GREEN = { 'h': 145, 's': 1.0, 'v': 0.5}
-BLUE =  { 'h': 126, 's': 1.0, 'v': 0.5 }
-
+  RED = { 'h': 0, 's': 1.0, 'v': 1.0 }
+  GREEN = { 'h': 145, 's': 0.5, 'v': 1.0}
+  BLUE =  { 'h': 126, 's': 1.0, 'v': 1.0 }
 
 ledSeq1 = { 'type': 'shift-colors',
             'interval': 1.0,
@@ -53,7 +54,7 @@ ledSeq2 = { 'type': 'shift-colors',
             'interval': 1.0,
             'colors': [ RED, RED, RED,
                         RED, RED, RED,
-                        RED,
+                        GREEN,
                         GREEN ]}
 
 ledSeq3 = { 'type': 'steady-repeat-colors',
@@ -72,8 +73,12 @@ while True:
       data_to_send = { 'state': True,
                        'num-leds': numLEDs,
                        'sequence': ledSeq2 }
-    else:
+    elif cnt % 3 == 2:
       data_to_send = { 'state': True,
+                       'num-leds': numLEDs,
+                       'sequence': ledSeq3 }
+    else:
+      data_to_send = { 'state': False,
                        'num-leds': numLEDs }
 
     cnt = (cnt + 1) % 3
@@ -89,14 +94,20 @@ while True:
   # Send JSON data over serial
   ser.write(json_data.encode() + b'\n')
 
-  # Read response from the other device
-  response = ser.readline().decode().strip()
-  if response:
-    try:
-      response_data = json.loads(response)
-      if response_data['rtn'] != 'ACK':
-        print("ERROR: no ack", response_data)
-    except json.JSONDecodeError:
-      print("Received invalid JSON data |" + response + '|')
+  NACK = True
+  while NACK:
+    # Read response from the other device
+    response = ser.readline().decode().strip()
+    if response:
+      try:
+        response_data = json.loads(response)
+        if response_data['rtn'] != 'ACK':
+          NACK = True
+          print("ERROR: no ack, will resend", response_data)
+        else:
+          NACK = False
+      except json.JSONDecodeError:
+        print("Received invalid JSON data |" + response + '|')
+        
     
   time.sleep(5)
